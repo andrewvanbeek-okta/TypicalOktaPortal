@@ -22,7 +22,7 @@
     position: relative;
     border-style: solid;
     border-width: 0.5px;
-    border-color: #B38D53;
+    border-color: #A94585;
     border-radius: 10px;
   }
   
@@ -36,7 +36,7 @@
   }
   
   .demo-card-square > .mdl-card__accent {
-    background: #ff9800;
+    background: #E9B3B4;
   }
 
   .mdl-button {
@@ -46,3 +46,69 @@
 
   .material-icons.md-24 { font-size: 50px; }
 
+ .mdl-card__title-text {
+
+    size: 14px;
+    font-size: 14px;
+    font-family: 'Oswald', sans-serif;
+     color: #E1946B;
+  }
+
+  .nav-links {
+    size: 14px;
+    font-size: 18px;
+    font-family: 'Oswald', sans-serif;
+     color: #E1946B;
+
+  }
+
+#navbar {
+  margin-top: 0%;
+  background-color: #FFFFFF;
+  min-height: 100px;
+}
+
+.auth-content {
+
+  background-color: #FFFFFF;
+  border-radius: 50px;
+}
+
+#form18 > div.o-form-button-bar > input {
+  background-color: #A94585;
+
+}
+
+#okta-sign-in .button-primary {
+      color: white;
+      background-color: #A94585;
+      color: #A94585;
+      border-color: #A94585;
+      background: none;
+      background-repeat: no-repeat;
+      filter: none;
+    }
+
+.auth-org-logo {
+  max-width: 200px;
+  max-height: 500px;
+}
+
+#appsBody {
+  width: 100%;
+  height: 100%;
+}
+
+.mdl-card__supporting-text{
+  background-color: #E9B3B4;
+  color: #E1946B;
+}
+
+.mdl-card__actions {
+  background-color: #FFF;
+
+}
+
+  .mdl-button--fab.mdl-button--colored {
+    background-color: #A94585;
+  }

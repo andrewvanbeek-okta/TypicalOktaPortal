@@ -1,5 +1,5 @@
 <head>
-  <title>ifp</title>
+  <title>connect portal</title>
 
    <!-- Compiled and minified CSS -->
 
@@ -25,33 +25,45 @@
 <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Lobster|Oswald" rel="stylesheet">
 <style>
-  
+
   .mdl-card__title-text {
 
     size: 14px;
     font-size: 14px;
     font-family: 'Oswald', sans-serif;
+     color: #E1946B;
+  }
+
+  .nav-links {
+    size: 14px;
+    font-size: 18px;
+    font-family: 'Oswald', sans-serif;
+     color: #E1946B;
+
   }
 
 #navbar {
   margin-top: 0%;
-  background-color: #0B0906;
+  background-color: white;
+  min-height: 100px;
 }
 
 .auth-content {
 
-  background-color: #0B0906;
+  background-color: #FFFFFF;
+  border-radius: 50px;
 }
 
 #form18 > div.o-form-button-bar > input {
-  background-color: #B38D53;
+  background-color: #A94585;
 
 }
 
 #okta-sign-in .button-primary {
       color: white;
-      background-color: #B38D53;
-      border-color: #B38D53;
+      background-color: #F58A67;
+      color: #2C88CB;
+      border-color: #2C88CB;
       background: none;
       background-repeat: no-repeat;
       filter: none;
@@ -68,23 +80,38 @@
 }
 
 .mdl-card__supporting-text{
-  background-color: #0B0906;
-  color: #B38D53;
+  background-color: #2C88CB;
+  color: #2C88CB;
 }
 
 .mdl-card__actions {
-  background-color: black;
+  background-color: #FFF;
 
 }
 
+ a {
+      text-decoration-color: black;
+       color: black;
+    }
+
   .mdl-button--fab.mdl-button--colored {
-    background-color: #B38D53;
+    background-color: #A94585;
   }
+
+  h5 {
+    color: black;
+  }
+
+  #background {
+    color: red;
+  }
+
+
 
 </style>
 
 
-          
+
 </head>
 
 
@@ -100,18 +127,30 @@
 </video>
 
 
-    
-    
+
+
   <header id="navbar" class="mdl-layout__header">
     <div class="mdl-layout__header-row">
       <!-- Title of the Header -->
-      <span class="mdl-layout-title"><img src="/IFP.png" height="100"></span>
+      <span class="mdl-layout-title"><img src="/uihfsu.png" height="100"></span>
       <!-- Spacer, to align items to right -->
       <div class="mdl-layout-spacer"></div>
       <!-- Navigation links, hidden on smaller displays -->
       <nav class="mdl-navigation mdl-layout--large-screen-only">
-      <a class="mdl-navigation__link" href="">Mercury</a>
-      <a id="logOut" class="mdl-navigation__link" href="">Logout</a>
+
+      {{#if showLogin}}
+      <form>
+
+
+      </form>
+
+
+      {{else}}
+                    <a id="userName" style="color: black;" class="mdl-navigation__link" href=""></a>
+        <a id="logOut" style="color: black;" class="mdl-navigation__link nav-links" href="">Logout</a>
+
+
+      {{/if}}
           <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">Your Title</span>
     </div>
@@ -129,11 +168,11 @@
       </nav>
     </div>
   </header>
-    
+
     <!-- Drawer container -->
 
-    
-    
+
+
   <main class="mdl-layout__content">
     <div class="page-content"><!-- Page Contents should be here--></div>
   </main>
@@ -146,29 +185,47 @@
 {{else}}
   <script>
 
- $.ajax({
-       url: 'https://vanbeektech.okta.com/api/v1/users/me/appLinks',
+//replace values of baseurl, client id , and whatever redirect uri you use
+
+var signIn = new OktaSignIn({
+  baseUrl: 'https://{your company's okta subdomain}.okta.com',
+  logo: '/userLogin.png',
+  clientId: '0oa43ju51wQSUcS6b1t7',
+  redirectUri: 'http://localhost:3000/authorization-code/callback',
+  authParams: {
+// display: 'page',
+  responseType: 'code',
+  scopes: ['openid']
+  }
+});
+
+ signIn.session.get((response) => {
+      if (response.status !== 'INACTIVE') {
+        console.log(response.userId)
+        var userId = response.userId
+        $.ajax({
+       url: '/appLinks',
        type: 'GET',
        xhrFields: { withCredentials: true },
        dataType: 'json',
        headers: {
-       "Authorization": "SSWS 00gvA4Y25xrXIaCqURU3YDbIU4ycHV5rYS36HcPQ6v",
          "Content-Type": "application/json",
          "Accept": "application/json"},
-       data: {}
+       data: {userId: userId}
      }).done(function(d){
+
             var appLinks = d
+
             var arrayLength = appLinks.length
             for (var i = 0; i < arrayLength; i++) {
-                 $("#apssBody").append("<div class='mdl-card mdl-shadow--2dp demo-card-square'><div style='background-color: black; background: url(" + appLinks[i].logoUrl + "); background-repeat:no-repeat;;'class='mdl-card__title mdl-card--expand'><h5 class='mdl-card__title-text' style='color: #B38D53'>" + appLinks[i].label + "</h5></div><div class='mdl-card__supporting-text'><center><a href='" + appLinks[i].linkUrl + "' id='link1'><id='" + appLinks[i].label + "' button class='mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--mini-fab mdl-button--colored' ><i class='material-icons'>open_in_browser</i></button></a></center></div></div>")
-               
-    
+                 $("#apssBody").append("<div class='mdl-card mdl-shadow--2dp demo-card-square'><div style='background-color: black; background: url(" + appLinks[i].logoUrl + ");  background-position: center; background-repeat:no-repeat;;'class='mdl-card__title mdl-card--expand'><h5 class='mdl-card__title-text' style='color: #B38D53'>" + appLinks[i].label + "</h5></div><div class='mdl-card__supporting-text'><center><a href='" + appLinks[i].linkUrl + "' id='link1'><id='" + appLinks[i].label + "' button class='mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--mini-fab mdl-button--colored' ><i class='material-icons'>open_in_browser</i></button></a></center></div></div>")
 
             }
-        
-
-
      })
+
+      }
+  });
+
 </script>
 
 
@@ -198,35 +255,29 @@
 <script>
 
 
+//replace values of baseurl, client id , and whatever redirect uri you use
 
 
 var signIn = new OktaSignIn({
-  baseUrl: 'https://vanbeektech.okta.com',
+  baseUrl: 'https://{your company's okta subdomain}.okta.com',
   logo: '/userLogin.png',
   clientId: '0oa43ju51wQSUcS6b1t7',
   redirectUri: 'http://localhost:3000/authorization-code/callback',
   authParams: {
-// display: 'page',
-  responseType: 'code',
-  scopes: ['openid']
+  responseType: ['code', 'id_token'],
+  scopes: ['openid', 'email', 'profile', 'address', 'phone', 'groups', 'offline_access']
   }
 });
 
+//replace values of baseurl, client id , and whatever redirect uri you use
 
 
 var authClient = new OktaAuth({
-    url: 'https://vanbeektech.okta.com',
+    url: 'https://{your company's okta subdomain}.okta.com',
     clientId: '0oa43ju51wQSUcS6b1t7',
     redirectUri: 'http://localhost:3000/authorization-code/callback'
 });
 
-authClient.token.parseFromUrl()
-.then(function(tokenOrTokens) {
-  console.log(tokenOrTokens)
-})
-.catch(function(err) {
-  // handle OAuthError
-});
 
 
 function IdPAuth() {
@@ -245,37 +296,20 @@ function IdPAuth() {
 
 
  $( "#logOut" ).click(function() {
-    authClient.signOut()
-    .then(function() {
-      console.log('successfully logged out');
-  })
-    .fail(function(err) {
-      console.error(err);
-    });
+    // authClient.signOut()
+    // .then(function() {
+    //   console.log('successfully logged out');
+    window.location.href = "https://google.com"
+  // })
+  //   .fail(function(err) {
+  //     console.error(err);
+  //   });
   });
 
-if(signIn.tokenManager.get('my_access_token') != undefined){
-  var token = authClient.tokenManager.get('my_access_token')
 
-//  $.ajax
-// ({
-//   type: "GET",
-//   url: "index1.php",
-//   dataType: 'json',
-//   async: false,
-//   headers: {
-//     "Authorization": "SSWS ")
-//   },
-//   data: '{ "comment" }',
-//   success: function (){
-//     alert('Thanks for your comment!'); 
-//   }
-// });
 
-  console.log(token)
-  
-}
-  
+
+
 
 
 
@@ -284,22 +318,23 @@ signIn.renderEl(
   {el: '#sign-in-container'},
 
   function success(res) {
+    console.log("#########################")
     console.log(res)
-
+    console.log("#########################")
     if (res.status === 'SUCCESS') {
 
 
       if (res.type === 'SESSION_STEP_UP') {
-  
+
         return;
       } else {
-   
-    
-      }     
 
-      authClient.tokenManager.add('my_access_token', res);
 
-      console.log(authClient.tokenManager.get('my_access_token'))
+      }
+
+   signIn.tokenManager.add('my_access_token', res);
+
+      console.log(signIn.tokenManager.get('my_access_token'))
 
 
 
@@ -310,7 +345,7 @@ signIn.renderEl(
   },
 
   function error(err) {
-   
+
   }
 );
 
@@ -325,24 +360,9 @@ signIn.renderEl(
 <div id="apssBody" class="container">
 
      {{#if appsTab}}
- 
+
     {{/if}}
 
-  </div>
-
-</template>
-
-<template name="appsTaba">
-HELLOOOOO
-    <div class="mdl-card mdl-shadow--2dp demo-card-square">
-    <div class="mdl-card__title mdl-card--expand">
-      <h2 class="mdl-card__title-text">{{label}}</h2>
-    </div>
-    <div class="mdl-card__supporting-text">
-  <center><button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-    <i class="material-icons">open_in_browser</i>
-  </button></center>
-    </div>
   </div>
 
 </template>
